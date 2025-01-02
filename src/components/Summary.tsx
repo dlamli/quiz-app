@@ -1,6 +1,8 @@
 import quizLogo from "../assets/quiz-complete.png";
 import { SummaryProps } from "../types";
 import QUESTIONS from "../data/question";
+import { derivePercentage } from "../libs/utils";
+import { ONE_HUNDRED } from "../constants";
 
 export default function Summary({ userAnswers }: SummaryProps) {
   const skippedAnswers = userAnswers.filter((answer) => answer === null);
@@ -8,15 +10,18 @@ export default function Summary({ userAnswers }: SummaryProps) {
     (answer, i) => answer === QUESTIONS[i].answers[0]
   );
 
-  const skippedAnswerShare = Math.round(
-    (skippedAnswers.length / userAnswers.length) * 100
+  const skippedAnswerShare = derivePercentage(
+    skippedAnswers.length,
+    userAnswers.length
   );
 
-  const correctAnswerShare = Math.round(
-    (correctAnswers.length / userAnswers.length) * 100
+  const correctAnswerShare = derivePercentage(
+    correctAnswers.length,
+    userAnswers.length
   );
 
-  const wrongAnswerShare = 100 - skippedAnswerShare - correctAnswerShare;
+  const wrongAnswerShare =
+    ONE_HUNDRED - skippedAnswerShare - correctAnswerShare;
 
   return (
     <div id="summary">
